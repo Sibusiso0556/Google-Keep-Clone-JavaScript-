@@ -1,11 +1,3 @@
-/* ==========================================================================
-   KEEPER — script.js
-   Vanilla JavaScript note-taking app (Google Keep clone)
-   Sections: State, DOM refs, Storage, Utilities, Validation, CRUD,
-             Rendering, Icons, Modal, Card Popovers, Confirm Dialog,
-             Search, Navigation, Header actions, Event wiring, Init
-   ========================================================================== */
-
 (function () {
   'use strict';
 
