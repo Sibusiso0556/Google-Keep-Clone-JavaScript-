@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Keep</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ============ HEADER ============ -->
+  <header class="app-header" id="appHeader">
+    <div class="header-left">
+      <button class="icon-btn menu-btn" id="menuBtn" data-tooltip="Main menu" aria-label="Toggle menu">
+        <svg viewBox="0 0 24 24" width="22" height="22"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <div class="logo">
+        <svg viewBox="0 0 48 48" width="30" height="30" class="logo-icon">
+          <defs>
+            <linearGradient id="keepBulbGradient" x1="8" y1="6" x2="40" y2="42" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#FFE177"/>
+              <stop offset="0.5" stop-color="#FFCA28"/>
+              <stop offset="1" stop-color="#FFA000"/>
+            </linearGradient>
+            <linearGradient id="keepBaseGradient" x1="19" y1="33" x2="29" y2="41" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#FF8A80"/>
+              <stop offset="1" stop-color="#F50057"/>
+            </linearGradient>
+            <radialGradient id="keepGloss" cx="17" cy="14" r="16" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/>
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+
+          <circle cx="24" cy="24" r="23" fill="url(#keepBulbGradient)"/>
+          <circle cx="24" cy="24" r="23" fill="url(#keepGloss)"/>
+
+          <path d="M24 11c-5.8 0-10.5 4.7-10.5 10.5 0 3.9 2.1 7.2 5.2 9v2.3c0 .7.6 1.2 1.2 1.2h8.2c.7 0 1.2-.6 1.2-1.2v-2.3c3.1-1.8 5.2-5.1 5.2-9C34.5 15.7 29.8 11 24 11z" fill="#FFFDE7"/>
+
+          <rect x="19.3" y="34.5" width="9.4" height="5.2" rx="1.6" fill="url(#keepBaseGradient)"/>
+          <line x1="20" y1="37.1" x2="28" y2="37.1" stroke="#ffffff" stroke-width="1" stroke-opacity="0.6"/>
+        </svg>
+        <h1>Keep</h1>
+      </div>
+    </div>
+
+    <div class="header-search">
+      <span class="search-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="20" height="20"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </span>
+      <input type="text" id="searchInput" placeholder="Search" aria-label="Search notes">
+      <button class="icon-btn clear-search-btn hidden" id="clearSearchBtn" data-tooltip="Clear search" aria-label="Clear search">
+        <svg viewBox="0 0 24 24" width="18" height="18"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+
+    <div class="header-right">
+      <button class="icon-btn" id="refreshBtn" data-tooltip="Refresh" aria-label="Refresh notes">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 4v5h5M20 20v-5h-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.5 15a8 8 0 0 0 13.9 2.5M18.5 9A8 8 0 0 0 4.6 6.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+      <button class="icon-btn" id="viewToggleBtn" data-tooltip="List view" aria-label="Toggle view">
+        <svg viewBox="0 0 24 24" width="20" height="20"><rect x="4" y="5" width="16" height="6" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="4" y="13" width="16" height="6" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+      </button>
+      <button class="icon-btn" id="settingsBtn" data-tooltip="Settings" aria-label="Settings">
+        <svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 13a7.6 7.6 0 0 0 0-2l2-1.5-2-3.4-2.3.9a7.7 7.7 0 0 0-1.7-1L15 3h-4l-.4 2.3a7.7 7.7 0 0 0-1.7 1l-2.3-.9-2 3.4L6.6 11a7.6 7.6 0 0 0 0 2l-2 1.5 2 3.4 2.3-.9a7.7 7.7 0 0 0 1.7 1L11 21h4l.4-2.3a7.7 7.7 0 0 0 1.7-1l2.3.9 2-3.4z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="icon-btn" id="appsBtn" data-tooltip="Google apps" aria-label="Apps">
+        <svg viewBox="0 0 24 24" width="20" height="20">
+          <circle cx="6" cy="6" r="1.6" fill="currentColor"/><circle cx="12" cy="6" r="1.6" fill="currentColor"/><circle cx="18" cy="6" r="1.6" fill="currentColor"/>
+          <circle cx="6" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="18" cy="12" r="1.6" fill="currentColor"/>
+          <circle cx="6" cy="18" r="1.6" fill="currentColor"/><circle cx="12" cy="18" r="1.6" fill="currentColor"/><circle cx="18" cy="18" r="1.6" fill="currentColor"/>
+        </svg>
+      </button>
+      <div class="avatar" id="avatarBtn" data-tooltip="Account" aria-label="User avatar">U</div>
+    </div>
+  </header>
+
+  <!-- ============ SIDEBAR ============ -->
+  <nav class="sidebar" id="sidebar" aria-label="Primary">
+    <button class="sidebar-item active" data-target="notes-section">
+      <svg viewBox="0 0 24 24" width="20" height="20"><path d="M12 5.5a4.5 4.5 0 0 0-2.5 8.25c.3.2.5.55.5.95V15h4v-.3c0-.4.2-.75.5-.95A4.5 4.5 0 0 0 12 5.5z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><line x1="10.3" y1="17" x2="13.7" y2="17" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      <span>Notes</span>
+    </button>
+    <button class="sidebar-item" data-action="reminders">
+      <svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 17v-5a6 6 0 0 1 12 0v5l1.5 2h-15z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M10 21a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      <span>Reminders</span>
+    </button>
+    <button class="sidebar-item" data-action="labels">
+      <svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 20h4l10.5-10.5a1.5 1.5 0 0 0 0-2.12l-1.88-1.88a1.5 1.5 0 0 0-2.12 0L4 16v4z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+      <span>Edit labels</span>
+    </button>
+    <button class="sidebar-item" data-target="archive-section">
+      <svg viewBox="0 0 24 24" width="20" height="20"><rect x="3" y="4" width="18" height="4" rx="1" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8" fill="none" stroke="currentColor" stroke-width="1.7"/><line x1="10" y1="12" x2="14" y2="12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      <span>Archive</span>
+    </button>
+    <button class="sidebar-item" data-action="trash">
+      <svg viewBox="0 0 24 24" width="20" height="20"><path d="M5 7h14M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m-8 0v12a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Trash</span>
+    </button>
+  </nav>
+
+  <!-- ============ MAIN CONTENT ============ -->
+  <main class="app-main" id="appMain">
+
+    <!-- ---- Notes Section ---- -->
+    <section class="notes-section" id="notes-section" aria-labelledby="notesHeading">
+
+      <!-- Quick-add trigger bar (click opens modal) -->
+      <button class="quick-add-bar" id="quickAddBar" data-tooltip="Take a note">
+        <span>Take a note...</span>
+        <span class="quick-add-icons">
+          <span class="icon-btn quick-icon" data-tooltip="New list" aria-label="New list">
+            <svg viewBox="0 0 24 24" width="19" height="19"><rect x="4" y="4" width="16" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 12l2.5 2.5L16 9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="icon-btn quick-icon" data-tooltip="New note with drawing" aria-label="New drawing">
+            <svg viewBox="0 0 24 24" width="19" height="19"><path d="M4 20h4l10.5-10.5a1.5 1.5 0 0 0 0-2.12l-1.88-1.88a1.5 1.5 0 0 0-2.12 0L4 16v4z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="icon-btn quick-icon" data-tooltip="New note with image" aria-label="New image note">
+            <svg viewBox="0 0 24 24" width="19" height="19"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="8.5" cy="10" r="1.5" fill="currentColor"/><path d="M3 16l5-5 4 4 3-3 5 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          </span>
+        </span>
+      </button>
+
+      <!-- Notes are grouped into Pinned / Others when at least one note is pinned -->
+      <h2 id="notesHeading" class="visually-hidden">Notes</h2>
+      <div id="notesContainer"></div>
+
+      <!-- Empty state for active notes -->
+      <div class="empty-state hidden" id="emptyNotes">
+        <svg viewBox="0 0 24 24" width="90" height="90"><path d="M12 5.5a4.5 4.5 0 0 0-2.5 8.25c.3.2.5.55.5.95V15h4v-.3c0-.4.2-.75.5-.95A4.5 4.5 0 0 0 12 5.5z" fill="none" stroke="currentColor" stroke-width="1.1" opacity="0.35"/><line x1="10.3" y1="17" x2="13.7" y2="17" stroke="currentColor" stroke-width="1.1" opacity="0.35"/></svg>
+        <p>Notes you add appear here</p>
+      </div>
+
+      <!-- Empty state for search with no results -->
+      <div class="empty-state hidden" id="emptySearch">
+        <svg viewBox="0 0 24 24" width="90" height="90"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.35"/><line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" opacity="0.35"/></svg>
+        <p>No matching notes</p>
+      </div>
+    </section>
+
+    <!-- ---- Archive Section ---- -->
+    <section class="notes-section hidden" id="archive-section" aria-labelledby="archiveHeading">
+      <h2 id="archiveHeading" class="section-label">Archive</h2>
+      <div class="notes-grid" id="archiveGrid" role="list"></div>
+
+      <div class="empty-state hidden" id="emptyArchive">
+        <svg viewBox="0 0 24 24" width="90" height="90"><rect x="3" y="4" width="18" height="4" rx="1" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.35"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.35"/></svg>
+        <p>Archived notes appear here</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ MODAL: CREATE / EDIT NOTE ============ -->
+  <div class="modal-overlay hidden" id="modalOverlay">
+    <div class="modal" id="noteModal" role="dialog" aria-modal="true" aria-labelledby="modalTitleLabel">
+      <form id="noteForm" novalidate>
+
+        <div class="modal-top-row">
+          <input type="text" id="noteTitleInput" class="modal-title-input" placeholder="Title" maxlength="120" aria-label="Note title">
+          <button type="button" class="icon-btn pin-modal-btn" id="modalPinBtn" data-tooltip="Pin note" aria-label="Pin note">
+            <svg viewBox="0 0 24 24" width="19" height="19"><g transform="rotate(45 12 12)"><path class="pin-head" d="M9 4h6v6.5l1.6 1.6v1.4H7.4v-1.4L9 10.5V4z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><line x1="12" y1="13.5" x2="12" y2="20" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></g></svg>
+          </button>
+        </div>
+
+        <textarea id="noteContentInput" class="modal-content-input" placeholder="Take a note..." rows="4" aria-label="Note content"></textarea>
+        <p class="form-error hidden" id="formError">Please add a title or some content before saving.</p>
+
+        <div class="modal-footer">
+          <div class="modal-toolbar">
+            <button type="button" class="icon-btn" id="checklistBtn" data-tooltip="Show checkboxes" aria-label="Show checkboxes">
+              <svg viewBox="0 0 24 24" width="18" height="18"><text x="9" y="15" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor" font-family="Georgia, 'Times New Roman', serif">A</text><line x1="3" y1="19" x2="15" y2="19" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            </button>
+            <div class="toolbar-item-wrap">
+              <button type="button" class="icon-btn" id="colorSwatchBtn" data-tooltip="Background options" aria-label="Choose color">
+                <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 2-.6 2-1.7 0-.5-.2-.9-.5-1.2-.3-.3-.5-.7-.5-1.2 0-1 .8-1.9 1.9-1.9H17a4 4 0 0 0 4-4c0-4.4-4-8-9-8z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><circle cx="7.5" cy="11" r="1.1" fill="currentColor"/><circle cx="10.5" cy="7.5" r="1.1" fill="currentColor"/><circle cx="15" cy="7.5" r="1.1" fill="currentColor"/><circle cx="17.5" cy="11" r="1.1" fill="currentColor"/></svg>
+              </button>
+              <div class="color-palette hidden" id="colorPalette"></div>
+            </div>
+            <button type="button" class="icon-btn" id="reminderBtn" data-tooltip="Remind me" aria-label="Remind me">
+              <svg viewBox="0 0 24 24" width="18" height="18"><path d="M6 17v-5a6 6 0 0 1 12 0v5l1.5 2h-15z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M10 21a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </button>
+            <button type="button" class="icon-btn" id="collaboratorBtn" data-tooltip="Collaborator" aria-label="Add collaborator">
+              <svg viewBox="0 0 24 24" width="18" height="18"><circle cx="9" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 19c0-3 2.7-5 6-5s6 2 6 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="18" y1="8" x2="18" y2="14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="15" y1="11" x2="21" y2="11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </button>
+            <button type="button" class="icon-btn" id="imageBtn" data-tooltip="Add image" aria-label="Add image">
+              <svg viewBox="0 0 24 24" width="18" height="18"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="8.5" cy="10" r="1.5" fill="currentColor"/><path d="M3 16l5-5 4 4 3-3 5 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+            </button>
+            <button type="button" class="icon-btn" id="modalArchiveBtn" data-tooltip="Archive" aria-label="Archive note">
+              <svg viewBox="0 0 24 24" width="18" height="18"><rect x="3" y="4" width="18" height="4" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="10" y1="12" x2="14" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </button>
+            <div class="toolbar-item-wrap">
+              <button type="button" class="icon-btn" id="modalMenuBtn" data-tooltip="More" aria-label="More options">
+                <svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="5.5" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="18.5" r="1.6" fill="currentColor"/></svg>
+              </button>
+              <div class="menu-popover hidden" id="modalMenuPopover">
+                <button type="button" class="menu-popover-item" id="modalDuplicateItem">Make a copy</button>
+                <button type="button" class="menu-popover-item danger" id="modalDeleteItem">Delete note</button>
+              </div>
+            </div>
+            <button type="button" class="icon-btn disabled" data-tooltip="Undo" aria-label="Undo" disabled>
+              <svg viewBox="0 0 24 24" width="18" height="18"><path d="M9 8L4 12l5 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 12h10a5 5 0 0 1 0 10h-1" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </button>
+            <button type="button" class="icon-btn disabled" data-tooltip="Redo" aria-label="Redo" disabled>
+              <svg viewBox="0 0 24 24" width="18" height="18"><path d="M15 8l5 4-5 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 12H10a5 5 0 0 0 0 10h1" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+          <button type="button" class="btn-text" id="closeModalBtn">Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============ SHARED CARD POPOVERS (color + kebab menu) ============ -->
+  <div class="color-palette hidden" id="cardColorPopover"></div>
+  <div class="menu-popover hidden" id="cardMenuPopover">
+    <button type="button" class="menu-popover-item" id="cardDuplicateItem">Make a copy</button>
+    <button type="button" class="menu-popover-item danger" id="cardDeleteItem">Delete note</button>
+  </div>
+
+  <!-- ============ CONFIRM DELETE DIALOG ============ -->
+  <div class="modal-overlay hidden" id="confirmOverlay">
+    <div class="confirm-dialog" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle">
+      <h3 id="confirmTitle">Delete this note?</h3>
+      <p>This action cannot be undone.</p>
+      <div class="confirm-actions">
+        <button class="btn-text" id="cancelDeleteBtn">Cancel</button>
+        <button class="btn-danger" id="confirmDeleteBtn">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TOAST ============ -->
+  <div class="toast hidden" id="toast"></div>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="app-footer">
+    <p>Open-source licenses</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

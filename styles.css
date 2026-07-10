@@ -1,0 +1,989 @@
+/* ==========================================================================
+   KEEPER — Google Keep clone
+   CSS organized into: Variables, Reset, Layout, Components, Utilities, Media
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. VARIABLES
+   ========================================================================== */
+:root {
+  /* -- Neutral palette (matched to Google Keep's actual UI shades) -- */
+  --color-bg: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-hover: #eef1f4;
+  --color-border: #e0e0e0;
+  --color-text: #202124;
+  --color-text-muted: #5f6368;
+  --color-text-faint: #80868b;
+  --color-sidebar-active: #feefc3;
+  --color-header-shadow: rgba(0, 0, 0, 0.12);
+
+  /* -- Brand accent -- */
+  --color-accent: #fbbc05;
+  --color-accent-dark: #b06000;
+  --color-avatar-bg: #673ab7;
+
+  /* -- Note card pastel palette (Keep-style, named) -- */
+  --note-default: #ffffff;
+  --note-coral: #faafa8;
+  --note-peach: #f39f76;
+  --note-sand: #fff8b8;
+  --note-mint: #e2f6d3;
+  --note-fog: #d4e4ed;
+  --note-storm: #aeccdc;
+  --note-dusk: #d3bfdb;
+  --note-blossom: #f6e2dd;
+  --note-clay: #e9e3d4;
+  --note-graphite: #efeff1;
+
+  /* -- Radii & spacing -- */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+
+  /* -- Typography (Keep uses Google Sans for headings, Roboto for body) -- */
+  --font-main: Roboto, 'Segoe UI', Arial, sans-serif;
+  --font-title: 'Google Sans', Roboto, Arial, sans-serif;
+
+  /* -- Motion -- */
+  --transition-fast: 120ms ease;
+  --transition-med: 220ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* -- Layout -- */
+  --header-height: 64px;
+  --sidebar-width: 72px;
+  --sidebar-width-expanded: 260px;
+}
+
+
+/* ==========================================================================
+   2. RESET
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-main);
+  color: var(--color-text);
+  background: var(--color-bg);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+button {
+  font-family: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+input,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  border: none;
+  outline: none;
+  background: transparent;
+  resize: none;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+
+/* ==========================================================================
+   3. LAYOUT
+   ========================================================================== */
+.app-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: 0 var(--space-md);
+  background: var(--color-bg);
+  z-index: 100;
+  transition: box-shadow var(--transition-fast);
+}
+
+.app-header.scrolled {
+  box-shadow: 0 1px 6px var(--color-header-shadow);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-shrink: 0;
+}
+
+.header-search {
+  flex: 1;
+  max-width: 720px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  background: var(--color-surface-hover);
+  border-radius: var(--radius-lg);
+  padding: 0 var(--space-md);
+  height: 46px;
+  transition: background var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.header-search:focus-within {
+  background: var(--color-bg);
+  box-shadow: 0 1px 6px var(--color-header-shadow);
+}
+
+.header-search input {
+  flex: 1;
+  height: 100%;
+  font-size: 1rem;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.sidebar {
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  bottom: 0;
+  width: var(--sidebar-width);
+  padding-top: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 90;
+  background: var(--color-bg);
+  transition: width var(--transition-med);
+  overflow: hidden;
+}
+
+.app-main {
+  margin-left: var(--sidebar-width);
+  margin-top: var(--header-height);
+  padding: var(--space-xl) var(--space-lg) 60px;
+  min-height: calc(100vh - var(--header-height));
+  transition: margin-left var(--transition-med);
+}
+
+.app-footer {
+  margin-left: var(--sidebar-width);
+  padding: var(--space-lg);
+  text-align: center;
+  color: var(--color-text-faint);
+  font-size: 0.8rem;
+}
+
+
+/* ==========================================================================
+   4. COMPONENTS
+   ========================================================================== */
+
+/* -- Logo -- */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.logo h1 {
+  font-family: var(--font-title);
+  font-size: 1.375rem;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  letter-spacing: 0.2px;
+}
+
+/* -- Icon buttons + tooltips -- */
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  position: relative;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.icon-btn:hover {
+  background: var(--color-surface-hover);
+}
+
+.icon-btn:active {
+  transform: scale(0.92);
+}
+
+.icon-btn.disabled,
+.icon-btn:disabled {
+  color: #cfd2d4;
+  cursor: default;
+}
+
+.icon-btn.disabled:hover,
+.icon-btn:disabled:hover {
+  background: none;
+}
+
+[data-tooltip] {
+  position: relative;
+}
+
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  background: #3c4043;
+  color: #fff;
+  font-size: 0.7rem;
+  white-space: nowrap;
+  padding: 5px 9px;
+  border-radius: 4px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+  z-index: 200;
+}
+
+[data-tooltip]:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(10px);
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-avatar-bg);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  font-size: 0.85rem;
+  font-family: var(--font-title);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.clear-search-btn {
+  width: 32px;
+  height: 32px;
+}
+
+/* -- Sidebar items -- */
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  height: 48px;
+  padding: 0 var(--space-lg);
+  border-radius: 0 24px 24px 0;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.sidebar-item span {
+  opacity: 0;
+  transition: opacity var(--transition-med);
+  font-size: 0.9rem;
+}
+
+.sidebar:hover .sidebar-item span,
+.sidebar.expanded .sidebar-item span {
+  opacity: 1;
+}
+
+.sidebar-item:hover {
+  background: var(--color-surface-hover);
+}
+
+.sidebar-item.active {
+  background: var(--color-sidebar-active);
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+/* -- Quick add bar -- */
+.quick-add-bar {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto var(--space-xl);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+  padding: 0 var(--space-sm) 0 var(--space-lg);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  color: var(--color-text-muted);
+  transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+.quick-add-bar:hover {
+  box-shadow: 0 3px 10px rgba(0,0,0,0.14);
+}
+
+.quick-add-bar:active {
+  transform: scale(0.995);
+}
+
+.quick-add-icons {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.quick-icon {
+  width: 38px;
+  height: 38px;
+}
+
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--color-text-faint);
+  margin: 0 0 var(--space-md) 4px;
+}
+
+/* -- Notes grid (masonry-ish via CSS columns for varied heights) -- */
+.notes-grid {
+  columns: 4 220px;
+  column-gap: var(--space-md);
+}
+
+/* List view mode: single column, full-width rows (toggled via body class) */
+body.list-view .notes-grid {
+  columns: 1;
+  max-width: 700px;
+}
+
+@supports (grid-template-rows: masonry) {
+  .notes-grid { display: block; }
+}
+
+/* -- Note card -- */
+.note-card {
+  break-inside: avoid;
+  margin-bottom: var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--note-default);
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  cursor: default;
+  position: relative;
+  transition: box-shadow var(--transition-fast), transform var(--transition-fast), opacity var(--transition-med);
+  animation: cardIn var(--transition-med);
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.note-card.removing {
+  animation: cardOut 180ms ease forwards;
+}
+
+@keyframes cardOut {
+  to { opacity: 0; transform: scale(0.9); }
+}
+
+.note-card:hover {
+  box-shadow: 0 3px 10px rgba(0,0,0,0.16);
+}
+
+.note-card:hover .note-actions,
+.note-card:hover .note-top-row {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Top row: select checkbox (left) + pin toggle (right), shown on hover
+   or always shown if the note is pinned / selected */
+.note-top-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  min-height: 22px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-fast);
+}
+
+.note-card.pinned .note-top-row,
+.note-card.selected .note-top-row {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Round select checkbox, matching the reference screenshot */
+.note-checkbox {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.6px solid var(--color-text-faint);
+  background: var(--color-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.note-checkbox svg {
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.note-checkbox.checked {
+  background: #202124;
+  border-color: #202124;
+}
+
+.note-checkbox.checked svg {
+  opacity: 1;
+}
+
+.note-pin-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-faint);
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.note-pin-btn:hover {
+  background: rgba(0,0,0,0.06);
+}
+
+.note-pin-btn.pinned {
+  color: var(--color-text);
+}
+
+.note-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text);
+  word-break: break-word;
+}
+
+.note-content {
+  font-size: 0.9rem;
+  color: var(--color-text);
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.4;
+}
+
+.note-date {
+  font-size: 0.7rem;
+  color: var(--color-text-faint);
+  margin-top: var(--space-xs);
+}
+
+.note-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-fast);
+  margin-top: var(--space-xs);
+}
+
+.note-actions .icon-btn {
+  width: 34px;
+  height: 34px;
+}
+
+/* touch devices: always show actions and top row */
+@media (hover: none) {
+  .note-actions,
+  .note-top-row {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+/* -- Empty states -- */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  padding: 80px var(--space-md);
+  color: var(--color-text-faint);
+  text-align: center;
+}
+
+.empty-state svg {
+  opacity: 0.8;
+}
+
+.empty-state p {
+  font-size: 1.05rem;
+  font-weight: 500;
+}
+
+/* -- Modal overlay + note modal -- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(32, 33, 36, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+  padding: var(--space-md);
+  animation: fadeIn var(--transition-fast);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal {
+  width: 100%;
+  max-width: 600px;
+  background: var(--color-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  overflow: visible;
+  animation: modalIn var(--transition-med);
+  transition: background var(--transition-fast);
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-top-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-md) 0 var(--space-lg);
+}
+
+.modal-title-input {
+  flex: 1;
+  font-size: 1.15rem;
+  font-weight: 500;
+  padding-bottom: var(--space-xs);
+}
+
+.pin-modal-btn {
+  color: var(--color-text-faint);
+  flex-shrink: 0;
+}
+
+.pin-modal-btn.pinned {
+  color: var(--color-text);
+}
+
+.modal-content-input {
+  display: block;
+  width: 100%;
+  font-size: 0.95rem;
+  padding: var(--space-sm) var(--space-lg) var(--space-md);
+  min-height: 100px;
+  line-height: 1.5;
+}
+
+.form-error {
+  color: #d93025;
+  font-size: 0.8rem;
+  padding: 0 var(--space-lg) var(--space-sm);
+}
+
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-sm) var(--space-md);
+  border-top: 1px solid var(--color-border);
+  position: relative;
+  gap: var(--space-sm);
+}
+
+.modal-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-wrap: wrap;
+}
+
+.modal-toolbar .icon-btn {
+  width: 36px;
+  height: 36px;
+}
+
+.toolbar-item-wrap {
+  position: relative;
+}
+
+.btn-text {
+  padding: 8px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text);
+  transition: background var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.btn-text:hover {
+  background: var(--color-surface-hover);
+}
+
+.btn-danger {
+  padding: 8px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+  background: #d93025;
+  transition: background var(--transition-fast);
+}
+
+.btn-danger:hover {
+  background: #b0241a;
+}
+
+/* -- Color palette popover (used by both modal + note cards) -- */
+.color-palette {
+  position: absolute;
+  bottom: 46px;
+  left: 0;
+  display: grid;
+  grid-template-columns: repeat(6, 28px);
+  gap: 8px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  animation: fadeIn var(--transition-fast);
+  z-index: 310;
+}
+
+/* When used as a floating card popover (positioned via JS with top/left) */
+#cardColorPopover {
+  position: fixed;
+  bottom: auto;
+}
+
+.color-swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+  position: relative;
+}
+
+.color-swatch:hover {
+  transform: scale(1.15);
+}
+
+.color-swatch.selected::after {
+  content: '✓';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: var(--color-text);
+}
+
+/* -- Kebab "more options" popover menu -- */
+.menu-popover {
+  position: absolute;
+  bottom: 46px;
+  left: 0;
+  min-width: 160px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  padding: var(--space-xs) 0;
+  animation: fadeIn var(--transition-fast);
+  z-index: 310;
+  overflow: hidden;
+}
+
+#cardMenuPopover {
+  position: fixed;
+  bottom: auto;
+}
+
+.menu-popover-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px var(--space-md);
+  font-size: 0.9rem;
+  color: var(--color-text);
+  transition: background var(--transition-fast);
+}
+
+.menu-popover-item:hover {
+  background: var(--color-surface-hover);
+}
+
+.menu-popover-item.danger {
+  color: #d93025;
+}
+
+/* -- Confirm dialog -- */
+.confirm-dialog {
+  width: 100%;
+  max-width: 380px;
+  background: var(--color-bg);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  animation: modalIn var(--transition-med);
+}
+
+.confirm-dialog h3 {
+  font-size: 1.1rem;
+  margin-bottom: var(--space-sm);
+  font-weight: 500;
+}
+
+.confirm-dialog p {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  margin-bottom: var(--space-lg);
+}
+
+.confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+}
+
+/* -- Toast -- */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 32px;
+  transform: translateX(-50%) translateY(20px);
+  background: #323232;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+  z-index: 400;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-med), transform var(--transition-med);
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+/* -- Pinned / Others group headings within the notes list -- */
+.notes-group {
+  margin-bottom: var(--space-lg);
+}
+
+.notes-group-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--color-text-faint);
+  margin: 0 0 var(--space-md) 4px;
+}
+
+
+/* ==========================================================================
+   5. UTILITIES
+   ========================================================================== */
+.hidden {
+  display: none !important;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+
+/* ==========================================================================
+   6. RESPONSIVE MEDIA QUERIES (mobile-first overrides above use desktop
+   defaults for layout; here we adapt down to smaller screens)
+   ========================================================================== */
+
+/* Tablet */
+@media (max-width: 900px) {
+  .notes-grid {
+    columns: 3 200px;
+  }
+  .logo h1 {
+    display: none;
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  :root {
+    --sidebar-width: 0px;
+  }
+
+  .sidebar {
+    flex-direction: row;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 58px;
+    background: var(--color-bg);
+    border-top: 1px solid var(--color-border);
+    justify-content: space-around;
+    padding-top: 0;
+  }
+
+  .sidebar-item {
+    flex-direction: column;
+    gap: 2px;
+    border-radius: var(--radius-sm);
+    padding: 6px 10px;
+    height: auto;
+  }
+
+  .sidebar-item span {
+    opacity: 1;
+    font-size: 0.62rem;
+  }
+
+  /* Hide secondary items on very small screens to keep the tab bar tidy */
+  .sidebar-item[data-action="labels"],
+  .sidebar-item[data-action="trash"] {
+    display: none;
+  }
+
+  .app-main {
+    margin-left: 0;
+    padding: var(--space-lg) var(--space-md) 80px;
+  }
+
+  .app-footer {
+    margin-left: 0;
+    padding-bottom: 80px;
+  }
+
+  .notes-grid {
+    columns: 1;
+  }
+
+  .header-search {
+    order: 3;
+    flex-basis: 100%;
+    margin-top: var(--space-sm);
+  }
+
+  .app-header {
+    flex-wrap: wrap;
+    height: auto;
+    min-height: var(--header-height);
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .logo h1 {
+    display: block;
+  }
+
+  .toast {
+    bottom: 74px;
+  }
+
+  .header-right .icon-btn#settingsBtn,
+  .header-right .icon-btn#appsBtn {
+    display: none;
+  }
+}
+
+/* Small phones */
+@media (max-width: 380px) {
+  .notes-grid {
+    columns: 1;
+  }
+  .modal {
+    border-radius: var(--radius-md);
+  }
+  .modal-toolbar .icon-btn {
+    width: 32px;
+    height: 32px;
+  }
+}
